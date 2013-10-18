@@ -2,7 +2,7 @@
 ===================================
 
 
-这个版本以新浪微博的python版开发包 [Sinaweibopy][1]改写，在这里表示由衷的感谢！
+这个版本根据新浪微博的python版SDK开发包 [Sinaweibopy](http://michaelliao.github.io/sinaweibopy "Sinaweibopy") 改写，在这里表示由衷的感谢！
 
 
-[1]: http://michaelliao.github.io/sinaweibopy Sinaweibopy
+
