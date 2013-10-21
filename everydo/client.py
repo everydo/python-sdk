@@ -4,7 +4,7 @@ from api import OCEverydoApi, WOEverydoApi
 from api.base import check_execption 
 
 
-class AccountApiClient:
+class EverydoApiClient:
 
     def __init__(self, key, secret, api_host, redirect=''):
         self.key = key
@@ -12,7 +12,10 @@ class AccountApiClient:
         self.api_host = api_host
         self.redirect_uri = redirect
         self.client = Client(key, secret,
-                       site=self.api_host, authorize_url=self.api_host + '/authorite', token_url= self.api_host + '/access_token')
+                       site=self.api_host, 
+                       authorize_url=self.api_host + '/authorite', 
+                       token_url= self.api_host + '/access_token')
+
         self.access_token = None
 
     def __repr__(self):
@@ -98,4 +101,29 @@ class WOApiClient(WOEverydoApi):
     def token_code(self):
         return self.access_token and self.access_token.token
 
+
+
+if __name__ == '__main__':
+    args = {'key': '',
+            'secret': '',
+            'api_host' : '',
+            'redirect' : ''}
+    # 初始化输入参数
+    edo_api = EverydoApiClient(**args)
+    print edo_api.authorize_url
+
+    code = input('input the code')
+    # 通过code获取access_token
+    edo_api.auth_with_code(str(code))
+
+    # 获取oc的API操作对象
+    oc_api = edo_api.get_account()
+
+
+
+    # 特定站点的API操作对象
+    wo_api = edo_api.get_site('default')
+
+    # 调用特定的API
+    file_info = wo_api.files.file_info(file_id=9284298392)
 
