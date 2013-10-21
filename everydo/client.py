@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from pyoauth2 import Client, AccessToken
-from api import OCEverydoApi, WOEverydoApi
-from api.base import check_execption 
+from everydo.api import OCEverydoApi, WOEverydoApi
+from everydo.api.base import check_execption 
 
 
 class EverydoApiClient:
@@ -13,8 +13,8 @@ class EverydoApiClient:
         self.redirect_uri = redirect
         self.client = Client(key, secret,
                        site=self.api_host, 
-                       authorize_url=self.api_host + '/authorite', 
-                       token_url= self.api_host + '/access_token')
+                       authorize_url=self.api_host + '/@@authorize', 
+                       token_url= self.api_host + '/@@access_token')
 
         self.access_token = None
 
@@ -48,7 +48,7 @@ class EverydoApiClient:
         self.access_token = access_token.refresh()
 
     def get_account(self):
-        client = OCApiClient(self.key, self.secret, self.api_host, self.redirect)
+        client = OCApiClient(self.key, self.secret, self.api_host, self.redirect_uri)
         client.auth_with_token(self.token_code)
         return client
 
@@ -58,7 +58,7 @@ class EverydoApiClient:
 
 
     def list_sites(self):
-        return self._get('list_sites')
+        return self._get('/list_sites')
 
     def get_site(self, site_name):
         site = self.list_sites.get(site_name, {})
@@ -68,10 +68,10 @@ class EverydoApiClient:
         return OCApiClient(self.key, self.secret, site.get(site_name)['api_url'], self.redirect)
 
 class OCApiClient(OCEverydoApi):
-    def __init__(self, key, secret, redirect=''):
+    def __init__(self, key, secret, api_host, redirect=''):
         self.redirect_uri = redirect
         self.client = Client(key, secret,
-                       site=self.API_HOST, authorize_url=self.AUTHORIZE_URL, token_url=self.TOKEN_URL)
+                       site=api_host, authorize_url='', token_url='')
         self.access_token = None
 
     def __repr__(self):
@@ -85,10 +85,10 @@ class OCApiClient(OCEverydoApi):
         return self.access_token and self.access_token.token
 
 class WOApiClient(WOEverydoApi):
-    def __init__(self, key, secret, redirect=''):
+    def __init__(self, key, secret, api_host, redirect=''):
         self.redirect_uri = redirect
         self.client = Client(key, secret,
-                       site=self.API_HOST, authorize_url=self.AUTHORIZE_URL, token_url=self.TOKEN_URL)
+                       site=api_host, authorize_url='', token_url='')
         self.access_token = None
 
     def __repr__(self):

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 kw = dict(
     name = 'everydo_client',
@@ -9,7 +9,7 @@ kw = dict(
     author_email = 'whchen1080@gmail.com',
     url = 'https://github.com/michaelliao/sinaweibopy',
     download_url = 'https://github.com/michaelliao/sinaweibopy',
-    packages = ['everydo'],
+    packages = find_packages(),
     install_requires = ['py-oauth2>=0.0.5'],
     classifiers = [
         'Development Status :: 5 - Production/Stable',
