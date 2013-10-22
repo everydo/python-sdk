@@ -1,5 +1,8 @@
-易度开放API的python版本SDK开发包
-===================================
+=======
+python-sdk
+==========
+
+python SDK for everydo.com
 
 安装：
 
