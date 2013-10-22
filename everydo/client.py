@@ -26,7 +26,7 @@ class EverydoApiClient:
         return self.client.auth_code.authorize_url(redirect_uri=self.redirect_uri)
 
     def auth_with_code(self, code):
-        self.access_token = self.client.auth_code.get_token(code, redirect_uri=self.redirect_uri)
+        self.access_token = self.client.auth_code.get_token(code, redirect_uri=self.redirect_uri, header_format="Oauth2 %s")
 
     def auth_with_token(self, token):
         self.access_token = AccessToken(self.client, token, header_format="Oauth2 %s")
@@ -56,7 +56,7 @@ class EverydoApiClient:
     def _get(self, url, **opts):
         return self.access_token.get(url, **opts)
 
-
+    @property
     def list_sites(self):
         return self._get('/list_sites')
 
