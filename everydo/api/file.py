@@ -4,7 +4,7 @@ from .base import BaseApi
 class FileApi(BaseApi):
     
     def get(self, file_id):
-        return self._get('/++initd++%s/@@file_info' % file_id)
+        return self._get('/++initd++%s/@@file_info' % str(file_id))
 
 
 

@@ -62,10 +62,12 @@ class EverydoApiClient:
 
     def get_site(self, site_name):
         site = self.list_sites.get(site_name, {})
-        if not site.get(site_name):
+       	if not site:
             return None
-        
-        return OCApiClient(self.key, self.secret, site.get(site_name)['api_url'], self.redirect)
+
+        client = WOApiClient(self.key, self.secret, site['site_url'], self.redirect_uri)
+        client.auth_with_token(self.token_code)
+        return client
 
 class OCApiClient(OCEverydoApi):
     def __init__(self, key, secret, api_host, redirect=''):
