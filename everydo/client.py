@@ -29,7 +29,7 @@ class EverydoApiClient:
         self.access_token = self.client.auth_code.get_token(code, redirect_uri=self.redirect_uri)
 
     def auth_with_token(self, token):
-        self.access_token = AccessToken(self.client, token)
+        self.access_token = AccessToken(self.client, token, header_format="Oauth2 %s")
 
     def auth_with_password(self, username, password, **opt):
         self.access_token = self.client.password.get_token(username=username,
@@ -44,7 +44,7 @@ class EverydoApiClient:
         return getattr(self.access_token, 'refresh_token', None)
 
     def refresh_token(self, refresh_token):
-        access_token = AccessToken(self.client, token='', refresh_token=refresh_token)
+        access_token = AccessToken(self.client, token='', refresh_token=refresh_token, header_format="Oauth2 %s")
         self.access_token = access_token.refresh()
 
     def get_account(self):
@@ -78,7 +78,7 @@ class OCApiClient(OCEverydoApi):
         return '<OCClient OAuth2>'
 
     def auth_with_token(self, token):
-        self.access_token = AccessToken(self.client, token)
+        self.access_token = AccessToken(self.client, token, header_format="Oauth2 %s")
 
     @property
     def token_code(self):
@@ -95,7 +95,7 @@ class WOApiClient(WOEverydoApi):
         return '<WOClient OAuth2>'
 
     def auth_with_token(self, token):
-        self.access_token = AccessToken(self.client, token)
+        self.access_token = AccessToken(self.client, token, header_format="Oauth2 %s")
 
     @property
     def token_code(self):
