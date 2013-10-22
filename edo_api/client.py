@@ -119,7 +119,9 @@ if __name__ == '__main__':
     # 获取oc的API操作对象
     oc_api = edo_api.get_account()
 
-
+    sites = edo_api.list_sites()
+    for key in sites.keys():
+        print "site_name: %s ,site_title: %s \nsite_url: %s\n" % (sites[key]['site_name'], sites[key]['site_title'], sites[key]['site_url'])
 
     # 特定站点的API操作对象
     wo_api = edo_api.get_site('default')

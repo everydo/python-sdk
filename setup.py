@@ -1,15 +1,15 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 kw = dict(
-    name = 'everydo_client',
+    name = 'everydo-client',
     version = '0.0.1',
     description = 'Everydo OAuth 2 API Python SDK',
-    long_description = "laala",
+    long_description = "Everydo OAuth 2 API Python SDK",
     author = 'Chen Weihong',
     author_email = 'whchen1080@gmail.com',
-    url = 'https://github.com/michaelliao/sinaweibopy',
-    download_url = 'https://github.com/michaelliao/sinaweibopy',
-    packages = ['everydo'],
+    url = 'https://github.com/everydo/python-sdk',
+    download_url = 'https://github.com/everydo/python-sdk',
+    packages = find_packages(),
     install_requires = ['py-oauth2>=0.0.5'],
     classifiers = [
         'Development Status :: 5 - Production/Stable',

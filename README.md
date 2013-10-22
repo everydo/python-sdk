@@ -1,29 +1,36 @@
 易度开放API的python版本SDK开发包
 ===================================
 
-
-这个版本根据新浪微博的python版SDK开发包 [Sinaweibopy](http://michaelliao.github.io/sinaweibopy "Sinaweibopy") 改写，在这里表示由衷的感谢！
-
 安装：
 
     pip install everydo
 
 
 使用示范：
+    from everydo import EverydoApiClient
 
-    from everydo import APIClient
+    args = {'key': '',
+            'secret': '',
+            'api_host' : '',
+            'redirect' : ''}
+    # 初始化输入参数
+    edo_api = EverydoApiClient(**args)
+    print edo_api.authorize_url
 
-    domain = input('input you domain')
-    # 生成授权地址
-    api_client = APIClient(client_id='4343433', client_secret='12345', redirect_uri='http://127.0.0.1/access', domain=domain)
-    url = api_client.request_authorize_url()
-    print url
-       
-    # access_token 获取
-    code = input('input you code')
-    access_token = api_client.request_access_token(grant_type='authorization_code', code=code)
-    api_client.set_access_token(access_token=access_token.access_token, refresh_token=access_token.refresh_token, expires=acce    ss_token.expires)
- 
-    # api调用
-    user_info = api_client.get.user_info(pid='users.admin')
-    file_info = api_client.get.file_info(site='defaults', uid='223232323')
+    code = input('input the code')
+    # 通过code获取access_token
+    edo_api.auth_with_code(str(code))
+
+    # 获取oc的API操作对象
+    oc_api = edo_api.get_account()
+
+    sites = edo_api.list_sites
+    for site in sites.values():
+        print "site_name: %s ,site_title: %s \nsite_url: %s\n" % (site['site_name'], sites['site_title'], sites['site_url'])
+
+    # 特定站点的API操作对象
+    wo_api = edo_api.get_site('default')
+
+    # 调用特定的API
+    file_info = wo_api.files.file_info(file_id=9284298392)
+
