@@ -4,7 +4,7 @@ from everydo.api import OCEverydoApi, WOEverydoApi
 from everydo.api.base import check_execption 
 
 
-class EverydoApiClient:
+class EverydoApiClient(OCEverydoApi):
 
     def __init__(self, key, secret, api_host, redirect=''):
         self.key = key
@@ -17,6 +17,7 @@ class EverydoApiClient:
                        token_url= self.api_host + '/@@access_token')
 
         self.access_token = None
+        self.instances = self._listInstances()
 
     def __repr__(self):
         return '<EverydoClient OAuth2>'
@@ -47,21 +48,17 @@ class EverydoApiClient:
         access_token = AccessToken(self.client, token='', refresh_token=refresh_token, header_format="Oauth2 %s")
         self.access_token = access_token.refresh()
 
-    def get_account(self):
-        client = OCApiClient(self.key, self.secret, self.api_host, self.redirect_uri)
-        client.auth_with_token(self.token_code)
-        return client
 
     @check_execption
     def _get(self, url, **opts):
         return self.access_token.get(url, **opts)
 
-    @property
-    def list_sites(self):
-        return self._get('/list_sites')
+    def _listInstances(self):
+        return {}
+        return self._get('/listInstances')
 
     def get_site(self, site_name):
-        site = self.list_sites.get(site_name, {})
+        site = self.instances.get(site_name, {})
        	if not site:
             return None
 

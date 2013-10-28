@@ -10,7 +10,10 @@ def check_execption(func):
         resp = func(*arg, **kws)
         if resp.status >= 400:
             raise EverydoAPIError(resp)
-        return resp.parsed
+        try:
+            return eval(resp.parsed)
+        except:
+            return None
     return _check
 
 
