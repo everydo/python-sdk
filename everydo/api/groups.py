@@ -4,47 +4,31 @@ from .base import BaseApi
 class GroupsAPI(BaseApi):
     
     def has_ou(self, ou_id):
-        return self._get('/hasOU', ou_id=ou_id)
+        return self._get('/api_has_ou', ou_id=ou_id)
 
     def list_group_members(self, key):
-        return self._get('/listGroupMembers', key=key)
+        return self._get('/api_list_group_members', key=key)
 
     def list_org_structure(self):
-        return self._get('/listOrgStructure')
+        return self._get('/api_list_org_structure')
 
     def list_companies(self):
-        return self._get('/listCompanies')
+        return self._get('/api_list_companies')
 
     def remove_groups(self, key):
-        return self._get('/removeGroups', key=key)
+        return self._get('/api_remove_groups', key=key)
 
     def list_instances(self, vendor_name, account_name, rpc):
-
-        return self._get('/listInstances', vendor_name=str(vendor_name), 
+        return self._get('/api_list_instances', vendor_name=str(vendor_name), 
                                     account_name=str(account_name), 
                                     rpc=rpc)
 
 
-    def ou_info(self, ou_id, include_disabled, skip_cache):
-
-        return self._get('/getOUDetail', ou_id=ou_id, include_disabled=include_disabled, skip_cache=skip_cache)
+    def ou_detail(self, ou_id, include_disabled):
+        return self._get('/api_get_ou_detail', ou_id=ou_id, include_disabled=include_disabled)
 
     def add_group_users(self, group_id, user_ids):
-
-        return self._get('/add_group_users',group_id=group_id, user_ids=user_ids)
+        return self._get('/api_add_group_users',group_id=group_id, user_ids=user_ids)
 
     def remove_group_users(self, group_id, user_ids):
-
-        return self._get('/remove_group_users',group_id=group_id, user_ids=user_ids)
-
-
-
-
-
-
-
-
-
-
-
-
+        return self._get('/api_remove_group_users',group_id=group_id, user_ids=user_ids)
