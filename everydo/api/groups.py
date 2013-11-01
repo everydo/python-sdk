@@ -18,12 +18,6 @@ class GroupsAPI(BaseApi):
     def remove_groups(self, key):
         return self._get('/api_remove_groups', key=key)
 
-    def list_instances(self, vendor_name, account_name, rpc):
-        return self._get('/api_list_instances', vendor_name=str(vendor_name), 
-                                    account_name=str(account_name), 
-                                    rpc=rpc)
-
-
     def ou_detail(self, ou_id, include_disabled):
         return self._get('/api_get_ou_detail', ou_id=ou_id, include_disabled=include_disabled)
 

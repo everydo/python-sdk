@@ -17,7 +17,6 @@ class EverydoApiClient(OCEverydoApi):
                        token_url= self.api_host + '/@@access_token')
 
         self.access_token = None
-        self.instances = self._listInstances()
 
     def __repr__(self):
         return '<EverydoClient OAuth2>'
@@ -35,6 +34,13 @@ class EverydoApiClient(OCEverydoApi):
     def auth_with_password(self, username, password, **opt):
         self.access_token = self.client.password.get_token(username=username,
                                  password=password, redirect_uri=self.redirect_uri, **opt)
+    def list_sites(self):
+        instances = self.account.list_instances()
+        sites = []
+        for app in instances.values():
+            for name, value in app.items():
+                value['name'] = name
+                sites.append(value)
 
     @property
     def token_code(self):
@@ -48,40 +54,13 @@ class EverydoApiClient(OCEverydoApi):
         access_token = AccessToken(self.client, token='', refresh_token=refresh_token, header_format="Oauth2 %s")
         self.access_token = access_token.refresh()
 
-
-    @check_execption
-    def _get(self, url, **opts):
-        return self.access_token.get(url, **opts)
-
-    def _listInstances(self):
-        return {}
-        return self._get('/listInstances')
-
     def get_site(self, site_name):
-        site = self.instances.get(site_name, {})
-       	if not site:
-            return None
-
-        client = WOApiClient(self.key, self.secret, site['site_url'], self.redirect_uri)
-        client.auth_with_token(self.token_code)
-        return client
-
-class OCApiClient(OCEverydoApi):
-    def __init__(self, key, secret, api_host, redirect=''):
-        self.redirect_uri = redirect
-        self.client = Client(key, secret,
-                       site=api_host, authorize_url='', token_url='')
-        self.access_token = None
-
-    def __repr__(self):
-        return '<OCClient OAuth2>'
-
-    def auth_with_token(self, token):
-        self.access_token = AccessToken(self.client, token, header_format="Oauth2 %s")
-
-    @property
-    def token_code(self):
-        return self.access_token and self.access_token.token
+        sites = self.list_sites()
+        for site in sites:
+            if site['name'] == site_name:
+                client = WOApiClient(self.key, self.secret, site['url'], self.redirect_uri)
+                client.auth_with_token(self.token_code)
+                return client
 
 class WOApiClient(WOEverydoApi):
     def __init__(self, key, secret, api_host, redirect=''):

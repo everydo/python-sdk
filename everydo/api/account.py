@@ -2,9 +2,11 @@
 from .base import BaseApi
 
 class AccountApi(BaseApi):
-    
     def get_token_info(self, access_token):
         return self._get('/api_get_token_info', access_token=access_token)
+
+    def list_instances(self):
+        return self._get('/api_list_instances')
 
     def remove_user(self, key):
         return self._get('/api_remove_user', key=key)
