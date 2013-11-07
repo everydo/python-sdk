@@ -11,7 +11,12 @@ def check_execption(func):
         if resp.status >= 400:
             raise EverydoAPIError(resp)
         try:
-            return eval(resp.parsed)
+            result = eval(resp.parsed)
+            if 'token_error' in result:
+                self.access_token.refresh()
+                if self.refresh_hook:
+                    self.refresh_hook(self.access_token.token, self.access_token.refresh_token)
+                return _check(*arg, **kws)
         except:
             return None
     return _check
