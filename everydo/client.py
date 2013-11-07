@@ -61,15 +61,16 @@ class EverydoApiClient(OCEverydoApi):
 
         for site in self.sites:
             if site['name'] == site_name:
-                client = WOApiClient(self.key, self.secret, site['url'], self.redirect_uri)
+                client = WOApiClient(self.key, self.secret, site['url'], authorize_url=self.api_host + '/@@authorize', 
+                                     token_url= self.api_host + '/@@access_token', redirect=self.redirect_uri)
                 client.auth_with_token(self.token_code)
                 return client
 
 class WOApiClient(WOEverydoApi):
-    def __init__(self, key, secret, api_host, redirect=''):
+    def __init__(self, key, secret, api_host, authorize_url, token_url, redirect=''):
         self.redirect_uri = redirect
         self.client = Client(key, secret,
-                       site=api_host, authorize_url='', token_url='')
+                       site=api_host, authorize_url=authorize_url, token_url=token_url)
         self.access_token = None
 
     def __repr__(self):
@@ -85,6 +86,10 @@ class WOApiClient(WOEverydoApi):
 
 
 if __name__ == '__main__':
+
+    # ===========================================================================================
+    # 新用户授权
+    # ===========================================================================================
     args = {'key': '',
             'secret': '',
             'api_host' : '',
@@ -96,20 +101,28 @@ if __name__ == '__main__':
     code = input('input the code')
     # 通过code获取access_token
     edo_api.auth_with_code(str(code))
-
-    # 获取oc的API操作对象
-    oc_api = edo_api.get_account()
-
-    sites = edo_api.list_sites()
-    for key in sites.keys():
-        print "site_name: %s ,site_title: %s \nsite_url: %s\n" % (sites[key]['site_name'], sites[key]['site_title'], sites[key]['site_url'])
-
-    # 特定站点的API操作对象
-    wo_api = edo_api.get_site('default')
+    save(edo_api.token_code, edo_api.refresh_token_code)
 
     # 调用特定的API
-    file_info = auto_check(wo_api, wo_api.files.file_info, file_id=9284298392)
+    status = auto_check(edo_api, edo_api.account.password_check, username='admin', password='')
 
+
+    # ===========================================================================================
+    # 从数据库中初始化用户授权
+    # ===========================================================================================
+    args = {'key': '',
+            'secret': '',
+            'api_host' : '',
+            'redirect' : ''}
+    # 初始化输入参数
+    edo_api = EverydoApiClient(**args)
+
+    # 从数据库中得到token，初始化
+    token, refresh_token = token_from_sql_server()
+    edo_api.auth_with_token(token, refresh_token)
+
+    # 调用接口
+    user_info = auto_check(edo_api, edo_api.users.get_user_info, pid='users.admin')
 
 def auto_check(api_obj, api_func, **kwargs):
     result = api_func(**kwargs)
