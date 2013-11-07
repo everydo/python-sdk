@@ -11,8 +11,26 @@ python SDK for everydo.com
 
 使用示范：
  
-    from everydo import EverydoApiClient
+    from everydo_client import EverydoClient
 
+    def refresh_hook(new_ticket):
+        # TODO: save the new ticket
+        pass
+
+    client = EverydoClient(API_KEY, API_SECRET, server_uri, refresh_hook)
+
+    # 基于username/password登录（获取ticket）
+    client.login(username=‘zope.system’, passowrd="")
+    client.org_info.get_pricipal_info(pid)
+    client.org_info.list_member_groups(pid)
+
+    # 基于code方式登录，
+    client.get_authorize_url(your_redirect_uri, SCOPE)
+    # TODO: 服务器得到传入的code
+    client.login_by_code(code)
+    
+    
+    
     # ===========================================================================================
     # 新用户授权
     # ===========================================================================================
