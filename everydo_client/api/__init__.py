@@ -6,19 +6,20 @@ from .groups import GroupsAPI
 class OCEverydoApi(object):
     @property
     def users(self):
-        return UserApi(self.access_token)
+        return UserApi(self, self.access_token, self.refresh_hook)
 
     @property
     def account(self):
-        return AccountApi(self.access_token)
+        return AccountApi(self, self.access_token, self.refresh_hook)
 
     @property
     def groups(self):
-        return GroupsAPI(self.access_token)
-    
+        return GroupsAPI(self, self.access_token, self.refresh_hook)
+
 class WOEverydoApi(object):
 
     @property
     def files(self):
-        return FileApi(self.access_token)
+        return FileApi(self, self.access_token, self.refresh_hook)
+        
 
