@@ -8,26 +8,26 @@ DEFAULT_COUNT = 20
 def check_execption(func):
     def _check(*arg, **kws):
         resp = func(*arg, **kws)
+        # 网络错误
+        if resp.status == 404:
+            raise EverydoOAuthError(404, 'network error')
+
+        result = resp.parsed
+        if isinstance(result, basestring):
+            result = eval(result)
+
         if resp.status >= 400:
-            raise EverydoAPIError(resp)
-        try:
-            result = eval(resp.parsed)
-            # 无错误返回结果
-            if not 'token_error' in result:
-                return result
-            
             self = arg[0]
-            if not self.refresh_hook:
-                return result
+            if result['error_code'] == 401 and  self.refresh_hook:
+                self.client.refresh_token(self.access_token.refresh_token)
+                if self.refresh_hook:
+                    self.refresh_hook(self.access_token.token, self.access_token.refresh_token)
+                return _check(*arg, **kws)
 
-            self.client.refresh_token(self.access_token.refresh_token)
-            print self.access_token.token, self.access_token.refresh_token
-            if self.refresh_hook:
-                self.refresh_hook(self.access_token.token, self.access_token.refresh_token)
-            return _check(*arg, **kws)
+            raise EverydoAPIError(resp)
 
-        except:
-            return None
+        return result
+
     return _check
 
 

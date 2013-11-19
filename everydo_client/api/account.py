@@ -11,6 +11,10 @@ class AccountApi(BaseApi):
     def remove_user(self, key):
         return self._get('/api_remove_user', key=key)
 
+    def sync(self, ous, groups, users, send_mail):
+        return self._get('/api_sync', ous=ous, groups=groups, users=users, send_mail=send_mail)
+
+
     def set_allowed_services(self, username, instance_name, services, app_name):
         return self._get('/api_set_allowed_services', username=username, instance_name=instance_name, services=services, app_name=app_name)
 
