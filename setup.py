@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 kw = dict(
-    name = 'everydo-client',
+    name = 'edo_client',
     version = '0.0.1',
     description = 'Everydo OAuth 2 API Python SDK',
     long_description = "Everydo OAuth 2 API Python SDK",

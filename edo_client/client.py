@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from pyoauth2 import Client, AccessToken
-from everydo_client.api import OCEverydoApi, WOEverydoApi
+from edo_client.api import OCEverydoApi, WOEverydoApi
 
 class EverydoClient(OCEverydoApi):
 
